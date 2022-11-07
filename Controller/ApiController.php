@@ -2,7 +2,7 @@
 
 require_once 'Views/ApiView.php';
 require_once 'Models/MoviesModel.php';
-
+require_once 'AuthHelper/AuthHelper.php';
 
 class ApiController{
 
@@ -10,12 +10,13 @@ class ApiController{
 	private $Model;
 	private $View;
 	private $Data;
-
+	private $Helper;
 
 	public function __construct(){
 		$this->Model = new MoviesModel();
 		$this->View = new ApiView();
 		$this->Data = file_get_contents("php://input");
+		$this->Helper = new AuthHelper();
 	}
 
 	public function getInput(){
@@ -62,6 +63,10 @@ class ApiController{
 	}
 
 	public function AddMovie(){
+		if(!$this->Helper->isLoggedIn()){
+			$this->View->response("No estas logeado", 401);
+			return;
+		}
 		$body = $this->getInput();
 
 		if(isset($body->Titulo,$body->Fecha,$body->Productor,$body->Descripcion,$body->Calificacion,$body->id_genero_fk)){
@@ -76,6 +81,10 @@ class ApiController{
 	}
 
 	public function EditMovie($params = null){
+		if(!$this->Helper->isLoggedIn()){
+			$this->View->response("No estas logeado", 401);
+			return;
+		}
 		$id = $params[':ID'];
 		$body = $this->getInput();
 		$movie = $this->Model->getMoviesById($id); //Verifica si existe la pelicula
@@ -177,7 +186,7 @@ class ApiController{
 					$this->View->response($movies,200);
 					break;
 				default:
-					$this->View->response([],204);
+					$this->View->response('',204);
 					break;
 			}		
 		
