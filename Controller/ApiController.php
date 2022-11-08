@@ -104,14 +104,14 @@ class ApiController{
 
 
 	public function DeleteMovie($params = null){
-		$id = $params[':ID'];
 		if(!$this->Helper->isLoggedIn()){
 			$this->View->response("No estas logeado", 401);
 			return;
 		}
+		$id = $params[':ID'];
 		$movie = $this->Model->getMoviesById($id);
 		if ($movie){
-			$this->Model->DeleteMovie($movie);
+			$this->Model->DeleteMovie($movie->ID);
 			$this->View->response('Pelicula borrada',200);
 		}else{
 			$this->View->response("La pelicula con el $id no existe",404);
