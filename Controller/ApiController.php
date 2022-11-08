@@ -70,12 +70,16 @@ class ApiController{
 		$body = $this->getInput();
 
 		if(isset($body->Titulo,$body->Fecha,$body->Productor,$body->Descripcion,$body->Calificacion,$body->id_genero_fk)){
-
-			$id = $this->Model->AddMovie($body->Titulo,$body->Fecha,$body->Productor,$body->Descripcion,$body->Calificacion,$body->id_genero_fk,null);
+			if($body->Calificacion > 0 && $body->Calificacion <= 5){
+				$id = $this->Model->AddMovie($body->Titulo,$body->Fecha,$body->Productor,$body->Descripcion,$body->Calificacion,$body->id_genero_fk,null);
 			$movie = $this->Model->getMoviesById($id);
 			$this->View->response($movie,201);
 		}else{
-				$this->View->response('Verifique la entrada',400);
+			$this->View->response('Ingrese una Calificacion min 1 max 5',400);
+		}
+			
+		}else{
+				$this->View->response('Complete los campos',400);
 			}
 
 	}
@@ -90,9 +94,14 @@ class ApiController{
 		$movie = $this->Model->getMoviesById($id); //Verifica si existe la pelicula
 		if(isset($id) && !empty($id) && $movie){
 			if(isset($body->Titulo,$body->Fecha,$body->Productor,$body->Descripcion,$body->Calificacion,$body->id_genero_fk)){
-				$this->Model->UpdateMovie($body->Titulo,$body->Fecha,$body->Productor,$body->Descripcion,$body->Calificacion,$body->id_genero_fk,null,$id);
-				$movie = $this->Model->getMoviesById($id);
-				$this->View->response($movie,200);
+				if($body->Calificacion > 0 && $body->Calificacion <= 5){
+					$this->Model->UpdateMovie($body->Titulo,$body->Fecha,$body->Productor,$body->Descripcion,$body->Calificacion,$body->id_genero_fk,null,$id);
+					$movie = $this->Model->getMoviesById($id);
+					$this->View->response($movie,200);
+				}else{
+					$this->View->response('Ingrese una Calificacion min 1 max 5',400);
+				}
+				
 			}else{
 				$this->View->response('Verifique la entrada',400);
 			}
