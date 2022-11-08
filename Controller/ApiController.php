@@ -2,7 +2,7 @@
 
 require_once 'Views/ApiView.php';
 require_once 'Models/MoviesModel.php';
-require_once 'AuthHelper/AuthHelper.php';
+require_once 'AuthHelper/AuthApiHelper.php';
 
 class ApiController{
 
@@ -16,7 +16,7 @@ class ApiController{
 		$this->Model = new MoviesModel();
 		$this->View = new ApiView();
 		$this->Data = file_get_contents("php://input");
-		$this->Helper = new AuthHelper();
+		$this->Helper = new AuthApiHelper();
 	}
 
 	public function getInput(){
@@ -26,13 +26,13 @@ class ApiController{
 	//Endpoints metodos
 	public function getMovies($params = null){
 		//Orden del las peliculas
-		if(isset($_GET['field']) && !empty($_GET['field'])){
+		if(isset($_GET['field']) && !empty($_GET['field'])){//Orden del las peliculas por Campo
 			$this->OrderMovies($_GET['field']);
-		}elseif(isset($_GET['rate']) && !empty($_GET['rate'])) {
+		}elseif(isset($_GET['rate']) && !empty($_GET['rate'])) {//Filtro por calificacion
 			$this->filterByRate($_GET['rate']);
-		}elseif(isset($_GET['orderByDate']) && !empty($_GET['orderByDate'])){
+		}elseif(isset($_GET['orderByDate']) && !empty($_GET['orderByDate'])){// Orden por un campo (punto 3 tpe)
 			$this->OrderMoviesByDate($_GET['orderByDate']);
-		}elseif(isset($_GET['page'])){
+		}elseif(isset($_GET['page'])){ //Paginacion
 			$limit = 10;
 			if(isset($_GET['limit']) && !empty($_GET['limit'])){
 				$limit = $_GET['limit'];
@@ -75,7 +75,7 @@ class ApiController{
 			$movie = $this->Model->getMoviesById($id);
 			$this->View->response($movie,201);
 		}else{
-				$this->View->response([],400);
+				$this->View->response('Verifique la entrada',400);
 			}
 
 	}
@@ -94,7 +94,7 @@ class ApiController{
 				$movie = $this->Model->getMoviesById($id);
 				$this->View->response($movie,200);
 			}else{
-				$this->View->response('',400);
+				$this->View->response('Verifique la entrada',400);
 			}
 		}else{
 			$this->View->response("No se encuentra la Pelicula con el ID $id",404);
@@ -102,7 +102,28 @@ class ApiController{
 
 	}
 
+
+	public function DeleteMovie($params = null){
+		$id = $params[':ID'];
+		if(!$this->Helper->isLoggedIn()){
+			$this->View->response("No estas logeado", 401);
+			return;
+		}
+		$movie = $this->Model->getMoviesById($id);
+		if ($movie){
+			$this->Model->DeleteMovie($movie);
+			$this->View->response('Pelicula borrada',200);
+		}else{
+			$this->View->response("La pelicula con el $id no existe",404);
+		}
+
+	}
+
 	public function OrderMoviesByDate($order){
+		if($order != 'ASC' && $order != 'DESC'){
+			$this->View->response('Ingrese un orden ascendente o descendente',400);
+			return;
+		}
 		if($order == 'ASC'){
 			$order = 'ASC';
 		}elseif($order == 'DESC'){
@@ -198,7 +219,7 @@ class ApiController{
 		if($movies){
 			$this->View->response($movies,200);
 		}else{
-			$this->View->response([],204);
+			$this->View->response('',204);
 		}
 		
 	}

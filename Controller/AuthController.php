@@ -1,6 +1,6 @@
 <?php
 
-require_once 'AuthHelper/AuthHelper.php';
+require_once 'AuthHelper/AuthApiHelper.php';
 require_once 'Views/ApiView.php';
 require_once 'Models/UsersModel.php';
 
@@ -20,7 +20,7 @@ class AuthController{
         //$this->model = new TaskModel();
         $this->view = new ApiView();
         $this->Model = new UsersModel();
-        $this->authHelper = new AuthHelper();
+        $this->authHelper = new AuthApiHelper();
         
         // lee el body del request
         $this->data = file_get_contents("php://input");
