@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 15, 2022 at 06:12 AM
+-- Generation Time: Nov 15, 2022 at 06:30 AM
 -- Server version: 10.9.4-MariaDB
 -- PHP Version: 8.1.12
 
@@ -20,6 +20,26 @@ SET time_zone = "+00:00";
 --
 -- Database: `peliculas_db`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `genero`
+--
+
+CREATE TABLE `genero` (
+  `ID` int(11) NOT NULL,
+  `Genero` varchar(25) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `genero`
+--
+
+INSERT INTO `genero` (`ID`, `Genero`) VALUES
+(1, 'Drama'),
+(2, 'Accion'),
+(3, 'Terror');
 
 -- --------------------------------------------------------
 
@@ -61,9 +81,36 @@ INSERT INTO `pelicula` (`ID`, `Titulo`, `Fecha`, `Productor`, `Descripcion`, `Ca
 (27, 'La masacre de Texas', 1974, 'Tobe Hooper', 'Cinco adolescentes visitan la tumba, supuestamente profanada, del abuelo de uno de ellos. Cuando llegan al lugar, donde hay un siniestro matadero, toman una deliciosa carne en una gasolinera. A partir de ese momento, los jóvenes vivirán la peor pesadilla de toda su vida. ', 3, NULL, 3),
 (32, 'eeeeeeeee', 2222, 'eeeeeeeeeeeeeee', 'weqweqweqweqweqwe', 0, NULL, 1);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `ID` int(11) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`ID`, `email`, `password`) VALUES
+(2, 'admin@admin.com', '$2y$10$OH/hyGH1ISffKc8foBE.ZO0KAJrsIezBcprshh5zv.dcv8W/LqnlC'),
+(3, 'agustin@admin.com', '$2y$10$S5BjnY8psDGZOxQeH6g0ruGNOaSVCCVZCjh0E0wrL8TNG7PKPP8dy'),
+(4, 'email@email.com', '$2y$10$FwKO0wVS3Nvy0.PEXy6E1.wBOVDekmwxbRfz1bmb6D2tOrOvPr.jK');
+
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `genero`
+--
+ALTER TABLE `genero`
+  ADD PRIMARY KEY (`ID`);
 
 --
 -- Indexes for table `pelicula`
@@ -73,14 +120,32 @@ ALTER TABLE `pelicula`
   ADD KEY `id_genero_fk` (`id_genero_fk`);
 
 --
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `genero`
+--
+ALTER TABLE `genero`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `pelicula`
 --
 ALTER TABLE `pelicula`
   MODIFY `ID` int(200) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
