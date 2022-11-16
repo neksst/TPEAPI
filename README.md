@@ -245,3 +245,18 @@ Ejemplo de uso: `peliculas?page=3&limit=5`
     ]
 ]
 ```
+
+## Orden por campo
+
+`/peliculas?field={campo}&order=ASC/DESC`
+
+| Parámetro | Descripcion |
+|-----------|-------------|
+| field={campo}|Selección del campo a ordenar|
+| order={ASC/DESC} | Ordenar de manera ascendente(ASC) o descendente(DESC)|
+
+## Ordenar pelicula por fecha de salida
+
+`peliculas?orderByDate={ASC/DESC}`
+
+Ordena todas las peliculas de manera ascendente o descendente.
